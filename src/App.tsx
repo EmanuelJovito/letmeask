@@ -1,7 +1,11 @@
+import React from 'react'
+import { NewRoom } from './pages/NewRoom'
+// import { Home } from './pages/Home'
+
+import './services/firebase'
+
+import './styles/global.scss'
+
 export function App(): React.ReactElement {
-  return (
-    <div className="App">
-      <h1>letmeask</h1>
-    </div>
-  )
+  return <NewRoom />
 }
