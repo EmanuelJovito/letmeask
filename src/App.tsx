@@ -14,7 +14,7 @@ type User = {
 
 type AuthContextType = {
   user: User | undefined
-  signInWithGoogle: () => void
+  signInWithGoogle: () => Promise<void>
 }
 
 export const AuthContext = createContext({} as AuthContextType)
@@ -22,24 +22,24 @@ export const AuthContext = createContext({} as AuthContextType)
 export function App(): React.ReactElement {
   const [user, setUser] = useState<User>()
 
-  function signInWithGoogle() {
+  async function signInWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider()
 
-    auth.signInWithPopup(provider).then(result => {
-      if (result.user) {
-        const { displayName, photoURL, uid } = result.user
+    const result = await auth.signInWithPopup(provider)
 
-        if (!displayName || !photoURL) {
-          throw new Error('Missing information from Google Account')
-        }
+    if (result.user) {
+      const { displayName, photoURL, uid } = result.user
 
-        setUser({
-          id: uid,
-          name: displayName,
-          avatar: photoURL
-        })
+      if (!displayName || !photoURL) {
+        throw new Error('Missing information from Google Account')
       }
-    })
+
+      setUser({
+        id: uid,
+        name: displayName,
+        avatar: photoURL
+      })
+    }
   }
 
   return (
